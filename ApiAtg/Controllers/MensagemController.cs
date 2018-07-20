@@ -17,13 +17,13 @@ namespace ApiAtg.Controllers
     {
         private const string AMQP_SERVIDOR = "35.199.98.99";
         private const int AMQP_PORTA = 5672;
-        private const string AMQP_FILA = "rpc_queue";
+        private const string AMQP_FILA = "fila_alcir";
 
         [HttpPost]
         public void Post(Mensagem mensagem)
         {
             var msgString = JsonConvert.SerializeObject(mensagem);
-            //EnviaMensagemAmqp(msgString);
+            EnviaMensagemAmqp(msgString);
             RecebeMensagemAmqp();
         }
 
@@ -85,11 +85,10 @@ namespace ApiAtg.Controllers
                     {
                         var body = ea.Body;
                         var message = Encoding.UTF8.GetString(body);
-                        //TODO:Evento de recebimento AMQP não está sendo disparado.
                     };
                     channel.BasicConsume(
                         queue: AMQP_FILA,
-                        autoAck: true,
+                        autoAck: false,
                         consumer: consumer);
                 }
             }
