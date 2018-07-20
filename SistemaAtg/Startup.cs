@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NucleoAtg.Dados;
 
 namespace SistemaAtg
 {
@@ -32,6 +34,9 @@ namespace SistemaAtg
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddDbContext<AtgContext>(options =>
+                    options.UseSqlite("Data Source=ATG.db"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,7 +52,6 @@ namespace SistemaAtg
             }
 
             app.UseStaticFiles();
-            app.UseCookiePolicy();
 
             app.UseMvc();
         }

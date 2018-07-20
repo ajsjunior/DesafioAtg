@@ -12,7 +12,7 @@ namespace SistemaAtg.Pages
 
         public void OnGet()
         {
-            Message = "Your application description page.";
+            Message = "Desafio ATG";
         }
     }
 }
