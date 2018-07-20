@@ -50,7 +50,7 @@ namespace SistemaAtg.Pages
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var stringTask = client.PostAsJsonAsync(URL_API, EnviarMensagem);
+                var stringTask = client.PutAsJsonAsync(URL_API, EnviarMensagem);
 
                 var msg = await stringTask;
                 enviado = msg.IsSuccessStatusCode;

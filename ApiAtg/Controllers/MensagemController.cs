@@ -19,12 +19,12 @@ namespace ApiAtg.Controllers
         private const int AMQP_PORTA = 5672;
         private const string AMQP_FILA = "fila_alcir";
 
-        [HttpPost]
-        public void Post(Mensagem mensagem)
+        [HttpPut]
+        public void Put(Mensagem mensagem)
         {
             var msgString = JsonConvert.SerializeObject(mensagem);
             EnviaMensagemAmqp(msgString);
-            RecebeMensagemAmqp();
+            //RecebeMensagemAmqp();
         }
 
         private void EnviaMensagemAmqp(string msgString)
@@ -85,9 +85,9 @@ namespace ApiAtg.Controllers
                     {
                         var body = ea.Body;
                         var msgBytes = Encoding.UTF8.GetString(body);
-                        var retorno = JsonConvert.DeserializeObject<RetornoMensagem>(msgBytes);
-                        if (!retorno.Status.Value)
-                            throw new ApplicationException($"A mensagem #{retorno.Id} retornou {retorno.Msgs?.Length} erros.");
+                        var retorno = JsonConvert.DeserializeObject<Mensagem>(msgBytes);
+                        //if (!retorno.Status.Value)
+                        //throw new ApplicationException($"A mensagem #{retorno.Id} retornou {retorno.Msgs?.Length} erros.");
                         channel.BasicAck(ea.DeliveryTag, false);
                     };
                     channel.BasicConsume(
@@ -96,6 +96,12 @@ namespace ApiAtg.Controllers
                         consumer: consumer);
                 }
             }
+        }
+
+        public IActionResult Get()
+        {
+            RecebeMensagemAmqp();
+            return Ok();
         }
     }
 }
