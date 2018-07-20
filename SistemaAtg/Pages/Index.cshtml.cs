@@ -39,6 +39,11 @@ namespace SistemaAtg.Pages
 
             var enviado = false;
 
+            // Grava mensagem no banco
+            _bd.Mensagens.Add(EnviarMensagem);
+            await _bd.SaveChangesAsync();
+            var novoId = EnviarMensagem.Id;
+
             // Envia mensagem para o serviço Rest
             using (var client = new HttpClient())
             {
@@ -55,15 +60,16 @@ namespace SistemaAtg.Pages
 
             if (enviado)
             {
-                // Grava mensagem no banco
-                _bd.Mensagens.Add(EnviarMensagem);
-                await _bd.SaveChangesAsync();
-
                 // Recarrega a página
                 return RedirectToPage("/Index");
             }
             else
             {
+                // Deleta do banco a mensagem se não foi enviada para o RabbitMQ
+                var registro = await _bd.Mensagens.FindAsync(novoId);
+                _bd.Mensagens.Remove(registro);
+                await _bd.SaveChangesAsync();
+
                 // Permanece na página
                 Historico = await _bd.Mensagens.AsNoTracking().ToListAsync();
                 return Page();
