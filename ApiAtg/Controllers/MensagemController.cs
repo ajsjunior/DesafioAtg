@@ -84,7 +84,11 @@ namespace ApiAtg.Controllers
                     consumer.Received += (model, ea) =>
                     {
                         var body = ea.Body;
-                        var message = Encoding.UTF8.GetString(body);
+                        var msgBytes = Encoding.UTF8.GetString(body);
+                        var retorno = JsonConvert.DeserializeObject<RetornoMensagem>(msgBytes);
+                        if (!retorno.Status.Value)
+                            throw new ApplicationException($"A mensagem #{retorno.Id} retornou {retorno.Msgs?.Length} erros.");
+                        channel.BasicAck(ea.DeliveryTag, false);
                     };
                     channel.BasicConsume(
                         queue: AMQP_FILA,
