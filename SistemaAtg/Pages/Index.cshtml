@@ -14,10 +14,10 @@
         <form asp-action="Index">
             <div class="form-group">
                 <label class="radio-inline">
-                    @Html.RadioButtonFor(model => model.EnviarMensagem.Side, "buy", new { name = "Side" }) Compra
+                    @Html.RadioButtonFor(model => model.EnviarMensagem.Side, NucleoAtg.Dados.Lado.Buy, new { name = "Side" }) Compra
                 </label>
                 <label class="radio-inline">
-                    @Html.RadioButtonFor(model => model.EnviarMensagem.Side, "sell", new { name = "Side" }) Venda
+                    @Html.RadioButtonFor(model => model.EnviarMensagem.Side, NucleoAtg.Dados.Lado.Sell, new { name = "Side" }) Venda
                 </label>
                 <span asp-validation-for="EnviarMensagem.Side" class="text-danger"></span>
             </div>

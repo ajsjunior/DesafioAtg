@@ -9,10 +9,18 @@ namespace NucleoAtg.Dados
     [Table("Mensagem")]
     public class Mensagem
     {
+        [Key]
         public int Id { get; set; }
 
-        [Display(Name = "Lado"), Required(ErrorMessage = "O lado é obrigatório."), StringLength(30)]
-        public string Side { get; set; }
+        [Column("Side"), StringLength(4), Required()]
+        public string SideString
+        {
+            get { return Side.ToString(); }
+            private set { Side = value.ParseEnum<Lado>(); }
+        }
+
+        [NotMapped, Display(Name = "Lado"), Required(ErrorMessage = "O lado é obrigatório.")]
+        public Lado Side { get; set; }
 
         [DataType(DataType.Currency), Display(Name = "Preço"), Required(ErrorMessage = "O preço é obrigatório."), DisplayFormat(DataFormatString = "{0:c}", ApplyFormatInEditMode = false), UIHint("Currency")]
         public decimal Price { get; set; }
